@@ -1,35 +1,33 @@
-# Assuming `dxf_lines` from the DXF parsing step
-# Assuming `laser_scan_points` from the laser scan parsing step
-
+import cv2
 import numpy as np
-import open3d as o3d
 
-def convert_to_point_cloud(points):
-    return np.array(points)
+def preprocess_image(image_path):
+    image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    blurred = cv2.GaussianBlur(image, (5, 5), 0)
+    edges = cv2.Canny(blurred, 50, 150)
+    return edges
 
-dxf_points = []
-for line in dxf_lines:
-    dxf_points.append(line[0])  # Start point
-    dxf_points.append(line[1])  # End point
 
-dxf_points = convert_to_point_cloud(dxf_points)
-laser_scan_points = convert_to_point_cloud(laser_scan_points)
+def extract_contours(edges):
+    contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    return contours
 
-def icp_registration(source_points, target_points):
-    source = o3d.geometry.PointCloud()
-    source.points = o3d.utility.Vector3dVector(source_points)
-    
-    target = o3d.geometry.PointCloud()
-    target.points = o3d.utility.Vector3dVector(target_points)
-    
-    threshold = 1.0
-    trans_init = np.eye(4)
-    
-    reg_p2p = o3d.pipelines.registration.registration_icp(
-        source, target, threshold, trans_init,
-        o3d.pipelines.registration.TransformationEstimationPointToPoint())
-    
-    return reg_p2p.transformation
+def match_shapes(contours1, contours2):
+    for contour1 in contours1:
+        for contour2 in contours2:
+            match = cv2.matchShapes(contour1, contour2, cv2.CONTOURS_MATCH_I1, 0.0)
+            if match < 0.1:  # Adjust the threshold based on your requirement
+                return True
+    return False
 
-transformation = icp_registration(dxf_points, laser_scan_points)
-print(transformation)
+
+dxf_image = preprocess_image('image_from_dxf.png')
+map_image = preprocess_image('ros_map_10x10_feet_no_grid.png')
+
+dxf_contours = extract_contours(dxf_image)
+map_contours = extract_contours(map_image)
+
+if match_shapes(dxf_contours, map_contours):
+    print("The shapes match.")
+else:
+    print("The shapes do not match.")
