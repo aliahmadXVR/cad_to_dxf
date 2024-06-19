@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+import argparse
 
 def template_matching(template_path, image_path):
     # Read template and image
@@ -22,17 +23,22 @@ def template_matching(template_path, image_path):
 
     # Display the matched image
     plt.figure(figsize=(10, 10))
-    plt.title("Template Matching")
+    plt.title(f"Template Matching with {template_path}")
     plt.imshow(matched_image)
     plt.show()
 
     return max_val
 
-# Paths to your images
-dxf_image_path = 'image_from_dxf.png'
-map_image_path = 'map1.png'
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Template Matching using OpenCV')
+    parser.add_argument('map_image_path', type=str, help='Path to the map image')
 
-# Perform template matching
-match_score = template_matching(dxf_image_path, map_image_path)
-print(f"Template matching score: {match_score}")
+    args = parser.parse_args()
 
+    # List of DXF image paths
+    dxf_image_paths = ['/home/ali/test_ws/src/my_package/CADs/cad1.png', '/home/ali/test_ws/src/my_package/CADs/cad2.png', '/home/ali/test_ws/src/my_package/CADs/cad3.png']
+
+    # Perform template matching for each DXF image
+    for dxf_image_path in dxf_image_paths:
+        match_score = template_matching(dxf_image_path, args.map_image_path)
+        print(f"Template matching score for {dxf_image_path}: {match_score}")
