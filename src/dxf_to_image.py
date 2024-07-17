@@ -17,4 +17,5 @@ def dxf_to_image(dxf_path, image_path):
     plt.savefig(image_path, bbox_inches='tight', pad_inches=0)
     plt.close(fig)
 
-dxf_to_image('/home/ali/test_ws/src/my_package/CADs/cad4.dxf', '/home/ali/test_ws/src/my_package/CADs/cad4.png')
+# dxf_to_image('/home/ali/test_ws/src/my_package/CADs/corner_area_cad.dxf', '/home/ali/test_ws/src/my_package/CADs/corner_area_cad.png')
+dxf_to_image('/home/ali/test_ws/src/my_package/CADs/meeting_room_cad.dxf', '/home/ali/test_ws/src/my_package/CADs/meeting_room_cad.png')

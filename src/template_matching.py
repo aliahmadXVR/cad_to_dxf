@@ -35,8 +35,8 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    # List of DXF image paths
-    dxf_image_paths = ['/home/ali/test_ws/src/my_package/CADs/cad1.png', '/home/ali/test_ws/src/my_package/CADs/cad2.png', '/home/ali/test_ws/src/my_package/CADs/cad3.png']
+    # List of DXF image paths (CAD Paths)
+    dxf_image_paths = ['/home/ali/test_ws/src/my_package/sample_maps/corner_area_cad_processed.png']
 
     # Perform template matching for each DXF image
     for dxf_image_path in dxf_image_paths:
