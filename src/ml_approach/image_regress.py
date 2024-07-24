@@ -20,7 +20,7 @@ def compare_images(imageA, imageB):
 
 # Load images
 image1 = load_and_convert('corner_area_cad.png')
-image2 = load_and_convert('meeting_room.png')
+image2 = load_and_convert('corner_area.png')
 
 # Resize image2 to match image1 dimensions
 image2 = resize_image(image2, image1.shape)
